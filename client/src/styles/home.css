@@ -1,0 +1,29 @@
+
+#hero{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+  } 
+  
+  
+  .cta-button {
+    display: inline-block;
+    background-color: #4CAF50;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+  
+ 
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .hero-content {
+        padding: 0 20px;
+    }
+    .feature-card {
+        margin: 10px;
+    }
+  }
