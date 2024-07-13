@@ -95,7 +95,7 @@ app.post("/api/signup",async (req,res)=>{
       const client=await pool.connect();
       console.log("Connection Success");
         try {
-          await client.query(insertQuery,[email,password,name]);
+          const query=await client.query(insertQuery,[email,password,name]);
           console.log("Query Success");
           const user={
             id:usrInp.email,
@@ -105,14 +105,16 @@ app.post("/api/signup",async (req,res)=>{
           req.logIn(user,(err)=>{
             if (err) {
             console.log(err);  
+            res.status(500).send(err);           
             }
             else{
-              res.sendStatus(200);            
+              res.status(200).send(user);           
             }
           })
           // res.json({message:"Query Success!"});
           client.release();
           // pool.end();
+
         } catch (error) {
           console.error("Query Error",error);
            res.json(error);

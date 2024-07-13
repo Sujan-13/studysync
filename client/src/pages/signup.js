@@ -3,6 +3,8 @@ import { useState } from "react";
 import Formbody from "../components/formbody";
 import { Link,useNavigate } from "react-router-dom";
 
+
+
 function Signup() {
     const navigate=useNavigate();
     const [formData, SetformData]=useState({
@@ -41,13 +43,14 @@ function Signup() {
           if(!/[^A-Za-z0-9]/.test(checkPassword)){
             setvalidatePassword("Password must contain at least one special character");
           }
-
+          if(checkPassword.length===0){
+            setvalidatePassword("");
+          }
         }
     }
 
     async function handleSubmit(e) {
         e.preventDefault();
-        navigate("/dashboard");
         if(validatePassword===''){
         try {
           const response= await fetch("http://localhost:3001/api/signup",{
@@ -58,25 +61,27 @@ function Signup() {
             body:JSON.stringify(formData)
           });
             const result= await response.json();
-            console.log(result);
             if (result.code==23505) {
               setvalidateEmail(false);
             }
-            if (result.ok) {
-              // history.push("/dashboard");
+            if (response.status===200) {
+              navigate("/dashboard");
             }
         } catch (error) {
-            console.error("What Error",error);         
+            console.error("Error",error);         
         }}
         };
  
     const items=[["Username","text"], ["Email","email"], ["Password","password"]];
             return(
                 
-                <div class="form-container">
-                 <h2>Sign Up</h2>
+                <main>
+                <div class="logo">
+                <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTOIsLtdQPu_wKkuK2cptqnjlgvV1kKeWLF7Ki6HKvqTpZVglh-" alt="" />
+               </div>
+                 <h1>Sign Up</h1>
 
-                    <form class="form" onSubmit={handleSubmit}>
+                    <form class="main" onSubmit={handleSubmit}>
                       
                         {items.map((item,index)=>{
                             var member=(item[0].toLowerCase());                            
@@ -88,10 +93,11 @@ function Signup() {
                              </div>
                             );
                         })}
-                        <button type="submit">Signup</button>
+                        
+                        <input type="submit" value="Signup" class="login"/>
                      </form>
                      <p>Already have an account? <Link to="/login">Log In</Link></p>
-                </div>
+                </main>
             );
 }
 
