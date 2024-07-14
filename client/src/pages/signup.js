@@ -1,6 +1,6 @@
 import "../styles/form.css";
 import { useState } from "react";
-import Formbody from "../components/formbody";
+import Formbody from "../components/Formbody";
 import { Link,useNavigate } from "react-router-dom";
 
 
@@ -55,16 +55,18 @@ function Signup() {
         try {
           const response= await fetch("http://localhost:3001/api/signup",{
             method:"POST",
+            credentials: 'include',
             headers:{
               "Content-type":"application/json"
             },
             body:JSON.stringify(formData)
           });
             const result= await response.json();
+            console.log(result);
             if (result.code==23505) {
               setvalidateEmail(false);
             }
-            if (response.status===200) {
+            if (result.authenticated) {
               navigate("/dashboard");
             }
         } catch (error) {
@@ -79,14 +81,14 @@ function Signup() {
                 <div class="logo">
                 <img src="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTOIsLtdQPu_wKkuK2cptqnjlgvV1kKeWLF7Ki6HKvqTpZVglh-" alt="" />
                </div>
-                 <h1>Sign Up</h1>
+                 <h2>Sign Up</h2>
 
                     <form class="main" onSubmit={handleSubmit}>
                       
                         {items.map((item,index)=>{
                             var member=(item[0].toLowerCase());                            
-                            return(
-                              <div>
+                            return(                          
+                             <div>
                             <Formbody key={index} field={item[0]} name={member} type={item[1]} value={formData[member]} handleChange={handleChange} />
                              {index==1 && !validateEmail && <p className="warning">Email already taken</p>}
                              {index==2 && <p className="warning">{validatePassword}</p>}

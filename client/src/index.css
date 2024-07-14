@@ -14,94 +14,95 @@ body,html{
   background-repeat: no-repeat;
   background-size: cover;
 }
-main{
-  width: 30%;
-  padding: 0.9vw 5vw;
-  margin: 0 auto;
+
+nav{
+  position: fixed;
+width: 100%;
+  height: 10vh;
   display: flex;
-  flex-direction: column;
-  margin-top: 2vw;
-  background-color: #EFF2F7;
-  justify-content: center;
-  align-items: center;
-  border-radius: 10px;
-  gap: 3vw;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #433D8B;
   .logo{
-      width: 100px;
-  
-      height: 100px;
-      /* margin: 0 auto; */
-      background-color: beige;
-      border-radius: 50%;
-      img{
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          object-position: center;
-          overflow: hidden;
+      margin-left: 15px;
+      font-size: 22px;
+      font-weight: bolder;
+  }
+  .menus{
+
+      display: flex;
+      list-style: none;
+      gap: 6vw;
+      align-items: center;
+      justify-content: center;
+      .menu{
+          font-size: 18px;
+          font-weight: 500;
       }
   }
-  form{
-input{
-  display: flex;
-  width: 100%;
-  padding: 0.2vw 0;
-  border-radius: 5px;
-  border: 1px solid black;
-  /* background-color: #f6e8e8; */
-  /* outline: none; */
-  
-}
-.login{
-  width: 100%;
-  height: 100%;
-  border: none;
-  outline: none;
-  border: 1px solid black;
-  /* background-color: beige; */
-  border-radius: 10px;
-  padding: 10px;
-  margin-top: 10px;
-  &:hover{
-      background-color: rgb(102, 102, 241);
-      color: white;
-      font-weight: bold;
+  .buttons{
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      button{
+          padding: 3px 20px;
+          &.login{
+           background-color: rgb(67, 67, 234);
+           color: #fff;
+           border-radius: 5px;
+           border-style: none;
+      padding: 8px 20px;
       cursor: pointer;
+      &:hover{
+          background-color: rgb(37, 143, 37);
+          color: #fff;
+      }
+     
+      }
+      &.register{
+          background-color: rgb(234, 67, 67);
+          color: #fff;
+          border-radius: 5px;
+          border-style: none;
+          padding: 8px 20px;
+      cursor: pointer;
+      &:hover{
+          background-color: rgb(120, 24, 24);
+          color: #fff;
+      }
+      }
   }
 }
-  }
 }
+
 
 h2 {
   color: #333333;
-  margin-bottom: 20px;
 }
 
 label {
-  font-weight: bold;
   margin-bottom: 8px;
+  font-size: small;
 }
 
 input[type="text"],
 input[type="email"],
 input[type="password"] {
-  padding: 10px 80px;
-  margin-bottom: 15px;
+  padding: 10px;
   border: 1px solid #cccccc;
   border-radius: 4px;
   width: 100%;
   box-sizing: border-box;
 }
 
-inp
-
 p {
-  margin-top: 10px;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 a {
-  color:inherit;
+  color:blue;
   text-decoration: none;
 }
 
@@ -121,11 +122,3 @@ footer{
   position:absolute;
   bottom: 0;
 }
-
-.warning{
-  margin: 2px ;
-  font-size: small;
-  font-style:bold;
-  color: red;
-}
-

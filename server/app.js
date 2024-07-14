@@ -17,8 +17,9 @@ const app=express();
 
 app.use(cors({
     origin:"http://localhost:3000",
-    credential:true
+    credentials:true
 }));
+
 
 app.use(bodyParser.json());
 
@@ -39,6 +40,7 @@ passport.use(new LocalStrategy({
   try {
   const result=await pool.query(selectQuery,[email]);
   const user=result.rows[0];
+  console.log(user);
   if(result.rows.length===0){
     console.log("No user found");
     return cb(null,false,{message:"Incorrect Username!"});}
@@ -82,8 +84,7 @@ const pool = new Pool({
   
 app.post("/api/signup",async (req,res)=>{
     usrInp=req.body;
-    console.log(usrInp);
-    let name=usrInp.name;
+    let name=usrInp.username;
     let email=usrInp.email;
     let password=await bcrypt.hash(usrInp.password,10);
     const insertQuery=`
@@ -96,7 +97,7 @@ app.post("/api/signup",async (req,res)=>{
       console.log("Connection Success");
         try {
           const query=await client.query(insertQuery,[email,password,name]);
-          console.log("Query Success");
+          console.log("Query Success",query);
           const user={
             id:usrInp.email,
             username:usrInp.email
@@ -108,7 +109,7 @@ app.post("/api/signup",async (req,res)=>{
             res.status(500).send(err);           
             }
             else{
-              res.status(200).send(user);           
+              res.status(200).send({"authenticated":true});           
             }
           })
           // res.json({message:"Query Success!"});
@@ -117,7 +118,7 @@ app.post("/api/signup",async (req,res)=>{
 
         } catch (error) {
           console.error("Query Error",error);
-           res.json(error);
+           res.send(error);
         }
     } catch (error) {
       console.error("Connection Error",error);
@@ -127,26 +128,49 @@ app.post("/api/signup",async (req,res)=>{
    
 });
 
-app.post("/api/login",passport.authenticate("local",{
-  successRedirect:"/success",
-  failureRedirect:"/failure"
-}));
+app.post('/api/login', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      console.error('Authentication error:', err);
+      return next(err);
+    }
+    if (!user) {
+      console.error('Authentication failed:', info.message);
+      return res.redirect('/failure');
+    }
+    req.logIn(user, (err) => {
+      console.log(user);
+      if (err) {
+        console.error('Login error:', err);
+        return next(err);
+      }
+      return res.redirect('/success');
+    });
+  })(req, res, next);
+});
 
 app.get("/success",(req,res)=>{
-  res.send("Succeuuuss");
+  res.send({"authenticated":true});           
+
 })
 
 app.get("/failure",(req,res)=>{
-  res.send("Failureyy");
+  res.send({"authenticated":false});           
 })
 
-app.get("/check",(req,res)=>{
+app.get("/api/check-session",(req,res)=>{
+  console.log("checking");
   if (req.isAuthenticated()) {
-    res.send("Hello, is Authenticated");
+    res.send({"authenticated":true});           
   }
   else{
-    res.send("Not Authenticated");
+    res.send({"authenticated":false});           
   }
+});
+
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({ message: 'Internal server error', error: err });
 });
 
 app.listen(PORT,()=>{
